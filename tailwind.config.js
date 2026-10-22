@@ -1,0 +1,58 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{ts,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        'canvas-cream': '#FAF7F2',
+        'surface-container-lowest': '#FFFFFF',
+        'surface-cream-subtle': '#F5F1EB',
+        'surface-muted': '#ECE7DF',
+        'border-subtle': '#E4DDD3',
+        'urdu-green-deep': '#143628',
+        'urdu-green-light': '#E8F0E6',
+        primary: '#012D1D',
+        'primary-container': '#1B4332',
+        'on-primary': '#FFFFFF',
+        secondary: '#805600',
+        'secondary-container': '#FFB630',
+        'secondary-fixed': '#FFDDAF',
+        'on-secondary-fixed': '#281800',
+        'saffron-light': '#FEF3C7',
+        'charcoal-secondary': '#374151',
+        'charcoal-muted': '#6B7280',
+        'urgent-red': '#DC2626',
+        'urgent-red-bg': '#FEE2E2',
+      },
+      fontFamily: {
+        sans: ['"DM Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        urdu: ['"Noto Nastaliq Urdu"', 'serif'],
+      },
+      fontSize: {
+        'headline-lg': ['2.25rem', { lineHeight: '2.75rem', letterSpacing: '-0.015em' }],
+        'headline-sm': ['1.25rem', { lineHeight: '1.75rem' }],
+        'headline-md': ['1.5rem', { lineHeight: '2rem' }],
+        'title-card': ['1.125rem', { lineHeight: '1.5rem' }],
+        'body-lg': ['1.125rem', { lineHeight: '1.75rem' }],
+        'body-base': ['1rem', { lineHeight: '1.5rem' }],
+        'body-sm': ['0.875rem', { lineHeight: '1.25rem' }],
+        'label-md': ['0.875rem', { lineHeight: '1.25rem' }],
+        'label-sm': ['0.75rem', { lineHeight: '1rem' }],
+        caption: ['0.6875rem', { lineHeight: '0.875rem', letterSpacing: '0.03em' }],
+      },
+      spacing: {
+        'space-xs': '0.25rem',
+        'space-sm': '0.5rem',
+        'space-md': '1rem',
+        'space-lg': '1.5rem',
+        'space-xl': '2.5rem',
+      },
+      boxShadow: {
+        card: '0 4px 12px -2px rgba(27, 67, 50, 0.08)',
+        bar: '0 -4px 16px rgba(28, 28, 30, 0.06)',
+      },
+    },
+  },
+  plugins: [],
+}
