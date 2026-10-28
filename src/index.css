@@ -2,10 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Typography */
+  --font-app: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Playfair Display', Georgia, serif;
+
+  /* Named color tokens (RGB channels so Tailwind opacity modifiers work) */
+  /* Surfaces */
+  --c-canvas-cream: 250 247 242;
+  --c-surface-container-lowest: 255 255 255;
+  --c-surface-cream-subtle: 245 241 235;
+  --c-surface-muted: 236 231 223;
+  --c-border-subtle: 228 221 211;
+  --c-scrim: 0 0 0;
+
+  /* Brand & accents */
+  --c-urdu-green-deep: 20 54 40;
+  --c-urdu-green-light: 232 240 230;
+  --c-primary: 1 45 29;
+  --c-primary-container: 27 67 50;
+  --c-on-primary: 255 255 255;
+  --c-secondary: 128 86 0;
+  --c-secondary-container: 255 182 48;
+  --c-secondary-fixed: 255 221 175;
+  --c-on-secondary-fixed: 40 24 0;
+  --c-saffron-light: 254 243 199;
+
+  /* Text */
+  --c-charcoal-primary: 27 27 29;
+  --c-charcoal-secondary: 55 65 81;
+  --c-charcoal-muted: 107 114 128;
+
+  /* Status */
+  --c-urgent-red: 220 38 38;
+  --c-urgent-red-bg: 254 226 226;
+}
+
 @layer base {
   html,
   body {
-    @apply bg-canvas-cream text-[#1b1b1d];
+    background-color: rgb(var(--c-canvas-cream));
+    color: rgb(var(--c-charcoal-primary));
   }
   body {
     @apply font-sans antialiased;
@@ -40,4 +77,127 @@
       'GRAD' 0,
       'opsz' 24;
   }
+
+  .app-calendar {
+    --fc-border-color: rgb(var(--c-border-subtle));
+    --fc-page-bg-color: transparent;
+    --fc-neutral-bg-color: rgb(var(--c-surface-cream-subtle) / 0.4);
+    --fc-today-bg-color: rgb(var(--c-urdu-green-light) / 0.45);
+    --fc-event-bg-color: transparent;
+    --fc-event-border-color: transparent;
+    --fc-event-text-color: rgb(var(--c-charcoal-primary));
+    --fc-list-event-hover-bg-color: rgb(var(--c-surface-cream-subtle));
+    --fc-small-font-size: 0.75rem;
+  }
+
+  .app-calendar .fc {
+    font-family: var(--font-app);
+  }
+
+  .app-calendar .fc-scrollgrid,
+  .app-calendar .fc-scrollgrid table {
+    border: 0;
+  }
+
+  .app-calendar .fc-theme-standard th,
+  .app-calendar .fc-theme-standard td {
+    border-color: rgb(var(--c-border-subtle));
+  }
+
+  .app-calendar .fc-col-header-cell {
+    border-top: 0;
+    background: transparent;
+  }
+
+  .app-calendar .fc-col-header-cell-cushion {
+    display: block;
+    padding: 0.5rem 0;
+    color: rgb(var(--c-charcoal-muted));
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .app-calendar .fc-daygrid-day {
+    border-left: 0;
+    border-top: 0;
+    color: rgb(var(--c-charcoal-primary));
+  }
+
+  .app-calendar .fc-daygrid-day-frame {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 0.375rem;
+  }
+
+  .app-calendar--full .fc-daygrid-day-frame {
+    min-height: 6.5rem;
+  }
+
+  .app-calendar .fc-daygrid-day-top {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .app-calendar .fc-daygrid-day-number {
+    padding: 0;
+    color: inherit;
+    font-size: 0.75rem;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .app-calendar .fc-daygrid-day.app-cal-other {
+    background-color: rgb(var(--c-surface-cream-subtle) / 0.4);
+  }
+
+  .app-calendar .fc-daygrid-day.app-cal-selected .fc-daygrid-day-frame {
+    box-shadow: inset 0 0 0 2px rgb(var(--c-primary-container));
+  }
+
+  .app-calendar .fc-event {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    cursor: pointer;
+  }
+
+  .app-calendar .fc-daygrid-event {
+    margin-top: 0.125rem;
+    padding: 0;
+    white-space: normal;
+  }
+
+  .app-calendar .fc-daygrid-event-harness {
+    margin-top: 0.125rem;
+  }
+
+  .app-calendar .fc-daygrid-event .fc-event-main {
+    min-width: 0;
+    padding: 0;
+  }
+
+  .app-calendar .fc-daygrid-day-events {
+    margin-top: 0.125rem;
+  }
+
+  .app-calendar .fc-daygrid-day-bottom {
+    margin-top: 0.125rem;
+  }
+
+  .app-calendar .fc-daygrid-more-link {
+    padding: 0 0.125rem;
+    color: rgb(var(--c-charcoal-muted));
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .app-calendar .fc-daygrid-more-link:hover {
+    color: rgb(var(--c-primary));
+  }
 }
+

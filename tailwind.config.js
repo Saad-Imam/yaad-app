@@ -1,32 +1,44 @@
 /** @type {import('tailwindcss').Config} */
+
+const color = (token) => `rgb(var(--c-${token}) / <alpha-value>)`
+
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        'canvas-cream': '#FAF7F2',
-        'surface-container-lowest': '#FFFFFF',
-        'surface-cream-subtle': '#F5F1EB',
-        'surface-muted': '#ECE7DF',
-        'border-subtle': '#E4DDD3',
-        'urdu-green-deep': '#143628',
-        'urdu-green-light': '#E8F0E6',
-        primary: '#012D1D',
-        'primary-container': '#1B4332',
-        'on-primary': '#FFFFFF',
-        secondary: '#805600',
-        'secondary-container': '#FFB630',
-        'secondary-fixed': '#FFDDAF',
-        'on-secondary-fixed': '#281800',
-        'saffron-light': '#FEF3C7',
-        'charcoal-secondary': '#374151',
-        'charcoal-muted': '#6B7280',
-        'urgent-red': '#DC2626',
-        'urgent-red-bg': '#FEE2E2',
+        // Surfaces
+        'canvas-cream': color('canvas-cream'),
+        'surface-container-lowest': color('surface-container-lowest'),
+        'surface-cream-subtle': color('surface-cream-subtle'),
+        'surface-muted': color('surface-muted'),
+        'border-subtle': color('border-subtle'),
+        scrim: color('scrim'),
+
+        // Brand & accents
+        'urdu-green-deep': color('urdu-green-deep'),
+        'urdu-green-light': color('urdu-green-light'),
+        primary: color('primary'),
+        'primary-container': color('primary-container'),
+        'on-primary': color('on-primary'),
+        secondary: color('secondary'),
+        'secondary-container': color('secondary-container'),
+        'secondary-fixed': color('secondary-fixed'),
+        'on-secondary-fixed': color('on-secondary-fixed'),
+        'saffron-light': color('saffron-light'),
+
+        // Text
+        'charcoal-primary': color('charcoal-primary'),
+        'charcoal-secondary': color('charcoal-secondary'),
+        'charcoal-muted': color('charcoal-muted'),
+
+        // Status
+        'urgent-red': color('urgent-red'),
+        'urgent-red-bg': color('urgent-red-bg'),
       },
       fontFamily: {
-        sans: ['"DM Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        sans: ['var(--font-app, "DM Sans")', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-heading, "Playfair Display")', 'Georgia', 'serif'],
         urdu: ['"Noto Nastaliq Urdu"', 'serif'],
       },
       fontSize: {
@@ -49,8 +61,8 @@ export default {
         'space-xl': '2.5rem',
       },
       boxShadow: {
-        card: '0 4px 12px -2px rgba(27, 67, 50, 0.08)',
-        bar: '0 -4px 16px rgba(28, 28, 30, 0.06)',
+        card: '0 4px 12px -2px rgb(var(--c-primary-container) / 0.08)',
+        bar: '0 -4px 16px rgb(var(--c-charcoal-primary) / 0.06)',
       },
     },
   },

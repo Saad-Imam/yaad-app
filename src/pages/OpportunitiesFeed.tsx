@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { Icon } from "../components/Icon";
 import Badge from "../components/Badge";
 import { filterOptions, opportunities, deadlinesThisWeek } from "../data";
+import { useSaved } from "../context/SavedContext";
 
 interface FilterState {
   types: string[];
@@ -30,7 +32,7 @@ function FiltersModal({
 }) {
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-scrim/30 p-4"
       onClick={onClose}
     >
       <div
@@ -64,7 +66,7 @@ function FiltersModal({
                   return (
                     <button
                       key={opt.id}
-                      className="flex items-center justify-between rounded-lg px-3 py-2 font-label-md text-[#1b1b1d] hover:bg-surface-cream-subtle transition-colors text-left"
+                      className="flex items-center justify-between rounded-lg px-3 py-2 font-label-md text-charcoal-primary hover:bg-surface-cream-subtle transition-colors text-left"
                       onClick={() => {
                         if (group.type === "checkbox") {
                           const list = draft[group.groupId] as string[];
@@ -125,6 +127,7 @@ export default function OpportunitiesFeed() {
   const [draft, setDraft] = useState<FilterState>(initialFilters);
   const [modalOpen, setModalOpen] = useState(false);
   const [tracked, setTracked] = useState<Record<string, boolean>>({});
+  const { isSaved, toggleSaved } = useSaved();
 
   const visible = useMemo(
     () =>
@@ -164,12 +167,19 @@ export default function OpportunitiesFeed() {
           <span className="hidden sm:block font-label-sm text-charcoal-muted">
             Showing {visible.length} of {opportunities.length}
           </span>
+          <Link
+            to="/feed/calendar"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-surface-container-lowest border border-border-subtle shadow-sm hover:bg-surface-cream-subtle transition-colors font-label-md font-semibold text-charcoal-primary"
+          >
+            <Icon name="calendar_month" className="text-[18px] text-primary-container" />
+            Calendar
+          </Link>
           <button
             onClick={() => {
               setDraft(filters);
               setModalOpen(true);
             }}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-surface-container-lowest border border-border-subtle shadow-sm hover:bg-surface-cream-subtle transition-colors font-label-md font-semibold text-[#1b1b1d]"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-surface-container-lowest border border-border-subtle shadow-sm hover:bg-surface-cream-subtle transition-colors font-label-md font-semibold text-charcoal-primary"
           >
             <Icon name="tune" className="text-[18px] text-primary-container" />
             Filters
@@ -207,7 +217,7 @@ export default function OpportunitiesFeed() {
                 <h2 className="font-serif font-semibold text-headline-sm text-primary">
                   {op.title}
                 </h2>
-                <p className="font-body-sm text-[#1b1b1d]">{op.description}</p>
+                <p className="font-body-sm text-charcoal-primary">{op.description}</p>
               </div>
               <div className="flex items-center justify-between gap-3 pt-1">
                 <div className="flex items-center gap-2">
@@ -226,17 +236,27 @@ export default function OpportunitiesFeed() {
                     className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-label-md transition-colors ${
                       tracked[op.id]
                         ? "bg-urdu-green-light text-urdu-green-deep"
-                        : "bg-surface-cream-subtle text-[#1b1b1d] hover:bg-surface-muted"
+                        : "bg-surface-cream-subtle text-charcoal-primary hover:bg-surface-muted"
                     }`}
                   >
                     {tracked[op.id] ? "Tracked" : "Track"}
                   </button>
                 </div>
                 <button
-                  className="p-2 rounded-lg text-charcoal-muted hover:text-urgent-red hover:bg-surface-cream-subtle transition-colors"
-                  title="Save"
+                  onClick={() => toggleSaved(op.id)}
+                  className={`p-2 rounded-lg transition-colors ${
+                    isSaved(op.id)
+                      ? "text-urdu-green-deep bg-urdu-green-light hover:bg-surface-muted"
+                      : "text-charcoal-muted hover:text-urdu-green-deep hover:bg-surface-cream-subtle"
+                  }`}
+                  title={isSaved(op.id) ? "Remove from saved" : "Save opportunity"}
+                  aria-pressed={isSaved(op.id)}
                 >
-                  <Icon name="bookmark_border" className="text-[20px]" />
+                  <Icon
+                    name={isSaved(op.id) ? "bookmark" : "bookmark_border"}
+                    filled={isSaved(op.id)}
+                    className="text-[20px]"
+                  />
                 </button>
               </div>
             </article>
@@ -265,51 +285,55 @@ export default function OpportunitiesFeed() {
         </div>
 
         {/* Deadlines panel */}
-        <aside className="col-span-12 xl:col-span-4 rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col gap-space-sm xl:sticky xl:top-24">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Icon name="alarm_on" className="text-[20px] text-urgent-red" />
-              <h3 className="font-serif font-semibold text-title-card text-primary">
-                Deadlines This Week
-              </h3>
-            </div>
-            <span className="px-2 py-0.5 rounded-full bg-urgent-red-bg text-urgent-red font-caption font-bold">
-              2 Critical
-            </span>
-          </div>
-          <div className="flex flex-col gap-2.5 pt-1">
-            {deadlinesThisWeek.map((d) => (
-              <div
-                key={d.title}
-                className="p-3 rounded-lg bg-surface-cream-subtle flex flex-col gap-1.5 transition-colors hover:bg-surface-muted"
-              >
-                <div className="flex items-center justify-between">
-                  <span
-                    className={`font-label-sm font-semibold flex items-center gap-1 ${
-                      d.urgent ? "text-urgent-red" : "text-secondary"
-                    }`}
-                  >
-                    <span
-                      className={`h-1.5 w-1.5 rounded-full ${d.urgent ? "bg-urgent-red" : "bg-secondary"}`}
-                    />
-                    {d.status}
-                  </span>
-                </div>
-                <div className="font-body-sm font-semibold text-primary">
-                  {d.title}
-                </div>
-                <div className="flex items-center justify-between font-caption text-charcoal-muted pt-1">
-                  <span>Required: {d.required}</span>
-                  <a
-                    href="#"
-                    className="text-urdu-green-deep font-semibold hover:underline flex items-center gap-0.5"
-                  >
-                    {d.linkLabel}{" "}
-                    <Icon name="chevron_right" className="text-[14px]" />
-                  </a>
-                </div>
+        <aside className="col-span-12 xl:col-span-4 flex flex-col gap-space-md xl:sticky xl:top-24">
+          <div className="rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col gap-space-sm">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Icon name="alarm_on" className="text-[20px] text-urgent-red" />
+                <h3 className="font-serif font-semibold text-title-card text-primary">
+                  Deadlines This Week
+                </h3>
               </div>
-            ))}
+              <span className="px-2 py-0.5 rounded-full bg-urgent-red-bg text-urgent-red font-caption font-bold">
+                2 Critical
+              </span>
+            </div>
+            <div className="flex flex-col gap-2.5 pt-1">
+              {deadlinesThisWeek.map((d) => (
+                <div
+                  key={d.title}
+                  className="p-3 rounded-lg bg-surface-cream-subtle flex flex-col gap-1.5 transition-colors hover:bg-surface-muted"
+                >
+                  <div className="flex items-center justify-between">
+                    <span
+                      className={`font-label-sm font-semibold flex items-center gap-1 ${
+                        d.urgent ? "text-urgent-red" : "text-secondary"
+                      }`}
+                    >
+                      <span
+                        className={`h-1.5 w-1.5 rounded-full ${d.urgent ? "bg-urgent-red" : "bg-secondary"}`}
+                      />
+                      {d.status}
+                    </span>
+                  </div>
+                  <div className="font-body-sm font-semibold text-primary">
+                    {d.title}
+                  </div>
+                  <div className="flex items-center justify-between font-caption text-charcoal-muted pt-1">
+                    <span>Required: {d.required}</span>
+                    <a
+                      href={d.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-urdu-green-deep font-semibold hover:underline flex items-center gap-0.5"
+                    >
+                      {d.linkLabel}{" "}
+                      <Icon name="chevron_right" className="text-[14px]" />
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </aside>
       </div>

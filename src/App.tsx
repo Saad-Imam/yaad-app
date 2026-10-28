@@ -1,26 +1,15 @@
+import { lazy, Suspense } from 'react'
 import { HashRouter, Route, Routes, Navigate } from 'react-router-dom'
 import Sidebar from './components/Sidebar'
 import TopBar from './components/TopBar'
 import OpportunitiesFeed from './pages/OpportunitiesFeed'
 import ApplicationsTracker from './pages/ApplicationsTracker'
+import SavedOpportunities from './pages/SavedOpportunities'
+import Settings from './pages/Settings'
+import { SavedProvider } from './context/SavedContext'
+import { ThemeProvider } from './context/ThemeContext'
 
-function Saved() {
-  return (
-    <div className="rounded-xl bg-surface-container-lowest p-space-lg shadow-sm">
-      <h1 className="font-serif font-bold text-headline-md text-primary">Saved Opportunities</h1>
-      <p className="font-body-sm text-charcoal-muted mt-1">Your bookmarked listings appear here.</p>
-    </div>
-  )
-}
-
-function Settings() {
-  return (
-    <div className="rounded-xl bg-surface-container-lowest p-space-lg shadow-sm">
-      <h1 className="font-serif font-bold text-headline-md text-primary">Settings</h1>
-      <p className="font-body-sm text-charcoal-muted mt-1">Preferences and notifications.</p>
-    </div>
-  )
-}
+const OpportunitiesCalendar = lazy(() => import('./pages/OpportunitiesCalendar'))
 
 function Shell() {
   return (
@@ -32,8 +21,24 @@ function Shell() {
           <div className="mx-auto w-full max-w-[1280px]">
             <Routes>
               <Route path="/" element={<OpportunitiesFeed />} />
+              <Route
+                path="/feed/calendar"
+                element={
+                  <Suspense
+                    fallback={
+                      <div className="flex min-h-[320px] items-center justify-center rounded-xl border border-border-subtle bg-surface-container-lowest shadow-sm">
+                        <span className="font-label-sm text-charcoal-muted">
+                          Loading calendar…
+                        </span>
+                      </div>
+                    }
+                  >
+                    <OpportunitiesCalendar />
+                  </Suspense>
+                }
+              />
               <Route path="/applications" element={<ApplicationsTracker />} />
-              <Route path="/saved" element={<Saved />} />
+              <Route path="/saved" element={<SavedOpportunities />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
@@ -46,8 +51,12 @@ function Shell() {
 
 export default function App() {
   return (
-    <HashRouter>
-      <Shell />
-    </HashRouter>
+    <ThemeProvider>
+      <SavedProvider>
+        <HashRouter>
+          <Shell />
+        </HashRouter>
+      </SavedProvider>
+    </ThemeProvider>
   )
 }
